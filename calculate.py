@@ -66,20 +66,20 @@ data = {
         Sanctuaries(katsu_ryoku=12348, kyo_ko=7450),
         Sanctuaries(sho_geki=9502, bou_gyo=26562)
     ],
-    "エーギル王の戦鎧": [
-        Sanctuaries(bin_sho=4800, sei_ki=5850),
-        Sanctuaries(kou_bou=13311, kyo_ko_tei_ko=13590),
-        Sanctuaries(tai_ryoku=10440, bou_gyo_mu_shi=8472),
-        Sanctuaries(katsu_ryoku=13140, kyo_ko=2550),
-        Sanctuaries(sho_geki=4800, bou_gyo=12450)
-    ],
-    # "エーギル王の明灯": [
-    #     Sanctuaries(bin_sho=11010, sei_ki=10890),
-    #     Sanctuaries(kou_bou=7650, kyo_ko_tei_ko=5850),
-    #     Sanctuaries(tai_ryoku=5850, bou_gyo_mu_shi=2550),
-    #     Sanctuaries(katsu_ryoku=12046, kyo_ko=7005),
-    #     Sanctuaries(sho_geki=11010, bou_gyo=31170)
+    # "エーギル王の戦鎧": [
+    #     Sanctuaries(bin_sho=4800, sei_ki=5850),
+    #     Sanctuaries(kou_bou=13311, kyo_ko_tei_ko=13590),
+    #     Sanctuaries(tai_ryoku=10440, bou_gyo_mu_shi=8472),
+    #     Sanctuaries(katsu_ryoku=13140, kyo_ko=2550),
+    #     Sanctuaries(sho_geki=4800, bou_gyo=12450)
     # ],
+    "エーギル王の明灯": [
+        Sanctuaries(bin_sho=11010, sei_ki=10890),
+        Sanctuaries(kou_bou=7650, kyo_ko_tei_ko=5850),
+        Sanctuaries(tai_ryoku=5850, bou_gyo_mu_shi=2550),
+        Sanctuaries(katsu_ryoku=12046, kyo_ko=7005),
+        Sanctuaries(sho_geki=11010, bou_gyo=31170)
+    ],
 }
 
 # アイテム名のリストを作成（順序を保持）
