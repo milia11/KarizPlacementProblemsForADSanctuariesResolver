@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
+
 class Sanctuaries:
     def __init__(self,
                  kou_bou=0,  # M攻防
@@ -33,6 +34,7 @@ class Sanctuaries:
                 self.sho_geki * 1.0 +
                 self.bou_gyo_mu_shi
         )
+
 
 # データを辞書形式で定義（アイテム名を含む）
 data = {
@@ -85,6 +87,12 @@ item_names = list(data.keys())
 
 # スコアの重み行列作成
 weights = np.array([[item.score for item in data[name]] for name in item_names])
+
+# n×n行列かどうかをチェック
+rows, cols = weights.shape
+if rows != cols:
+    raise ValueError(f"weights行列は正方行列である必要があります。現在のサイズ: {rows}×{cols}")
+
 max_value = np.max(weights)
 cost_matrix = max_value - weights  # コスト行列（スコア最大化→最小化に変換）
 
