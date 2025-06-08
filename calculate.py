@@ -1,7 +1,6 @@
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
-
 class Sanctuaries:
     def __init__(self,
                  kou_bou=0,  # M攻防
@@ -35,60 +34,57 @@ class Sanctuaries:
                 self.bou_gyo_mu_shi
         )
 
-
-data = [
-    # 極盛マッシュの杖
-    [
+# データを辞書形式で定義（アイテム名を含む）
+data = {
+    "極盛マッシュの杖": [
         Sanctuaries(bin_sho=7875, sei_ki=7275),
         Sanctuaries(kou_bou=10125, kyo_ko_tei_ko=5850),
         Sanctuaries(tai_ryoku=7875, bou_gyo_mu_shi=2550),
         Sanctuaries(katsu_ryoku=8550, kyo_ko=2550),
         Sanctuaries(sho_geki=7275, bou_gyo=12450)
     ],
-    # アストラ王の鎧
-    [
+    "アストラ王の鎧": [
         Sanctuaries(bin_sho=4800, sei_ki=8730),
         Sanctuaries(kou_bou=11205, kyo_ko_tei_ko=5850),
         Sanctuaries(tai_ryoku=8730, bou_gyo_mu_shi=6262),
         Sanctuaries(katsu_ryoku=8550, kyo_ko=2550),
         Sanctuaries(sho_geki=8355, bou_gyo=23142)
     ],
-    # ユピテル王の法環
-    [
+    "ユピテル王の法環": [
         Sanctuaries(bin_sho=9075, sei_ki=5850),
         Sanctuaries(kou_bou=7650, kyo_ko_tei_ko=11682),
         Sanctuaries(tai_ryoku=9306, bou_gyo_mu_shi=2550),
         Sanctuaries(katsu_ryoku=12046, kyo_ko=7005),
         Sanctuaries(sho_geki=4800, bou_gyo=12450)
     ],
-    # エーギル王の戦矛
-    [
+    "エーギル王の戦矛": [
         Sanctuaries(bin_sho=4800, sei_ki=9648),
         Sanctuaries(kou_bou=7650, kyo_ko_tei_ko=5850),
         Sanctuaries(tai_ryoku=5850, bou_gyo_mu_shi=7450),
         Sanctuaries(katsu_ryoku=12348, kyo_ko=7450),
         Sanctuaries(sho_geki=9502, bou_gyo=26562)
     ],
-    # エーギル王の戦鎧
-    [
+    "エーギル王の戦鎧": [
         Sanctuaries(bin_sho=4800, sei_ki=5850),
         Sanctuaries(kou_bou=13311, kyo_ko_tei_ko=13590),
         Sanctuaries(tai_ryoku=10440, bou_gyo_mu_shi=8472),
         Sanctuaries(katsu_ryoku=13140, kyo_ko=2550),
         Sanctuaries(sho_geki=4800, bou_gyo=12450)
     ],
-    # エーギル王の明灯
-    # [
-    #     Sanctuaries(binSho=11010, seiKi=10890),
-    #     Sanctuaries(kyoKouTeiKou=5850, kouBou=7650),
-    #     Sanctuaries(taiRyoku=5850, bouGyoMuShi=2550),
-    #     Sanctuaries(katsuRyoku=12046, kyoKou=7005),
-    #     Sanctuaries(shoGeki=11010, bouGyo=31170)
+    # "エーギル王の明灯": [
+    #     Sanctuaries(bin_sho=11010, sei_ki=10890),
+    #     Sanctuaries(kou_bou=7650, kyo_ko_tei_ko=5850),
+    #     Sanctuaries(tai_ryoku=5850, bou_gyo_mu_shi=2550),
+    #     Sanctuaries(katsu_ryoku=12046, kyo_ko=7005),
+    #     Sanctuaries(sho_geki=11010, bou_gyo=31170)
     # ],
-]
+}
+
+# アイテム名のリストを作成（順序を保持）
+item_names = list(data.keys())
 
 # スコアの重み行列作成
-weights = np.array([[item.score for item in row] for row in data])
+weights = np.array([[item.score for item in data[name]] for name in item_names])
 max_value = np.max(weights)
 cost_matrix = max_value - weights  # コスト行列（スコア最大化→最小化に変換）
 
@@ -99,7 +95,8 @@ print("最適な割り当て:")
 total = 0.0
 for i, j in zip(row_ind, col_ind):
     value = weights[i][j]
-    print(f"枠 {i + 1} → アイテム {j + 1}（スコア {value}）")
+    item_name = item_names[i]
+    print(f"枠 {j + 1} → {item_name}（スコア {value}）")
     total += value
 
 print(f"最大スコア合計: {total}")
