@@ -13,7 +13,8 @@ class Sanctuaries:
                  bou_gyo=0,  # M防御
                  bou_gyo_mu_shi=0,  # M防御無視
                  kyo_ko=0,  # M強攻
-                 kyo_ko_tei_ko=0  # M強攻抵抗
+                 kyo_ko_tei_ko=0,  # M強攻抵抗
+                 kou_geki=0,  # M攻撃
                  ):
         self.kou_bou = kou_bou
         self.bin_sho = bin_sho
@@ -25,14 +26,17 @@ class Sanctuaries:
         self.bou_gyo_mu_shi = bou_gyo_mu_shi
         self.kyo_ko = kyo_ko
         self.kyo_ko_tei_ko = kyo_ko_tei_ko
+        self.kou_geki = kou_geki
 
     @property
     def score(self):
+        # 攻撃専門
         return (
                 self.kou_bou +
                 self.bin_sho * 2.0 +
-                self.sho_geki * 1.0 +
-                self.bou_gyo_mu_shi
+                self.sho_geki +
+                self.bou_gyo_mu_shi +
+                self.kou_geki
         )
 
 
@@ -43,43 +47,57 @@ data = {
         Sanctuaries(kou_bou=10125, kyo_ko_tei_ko=5850),
         Sanctuaries(tai_ryoku=7875, bou_gyo_mu_shi=2550),
         Sanctuaries(katsu_ryoku=8550, kyo_ko=2550),
-        Sanctuaries(sho_geki=7275, bou_gyo=12450)
+        Sanctuaries(sho_geki=7275, bou_gyo=12450),
+        Sanctuaries(kou_geki=2550,bou_gyo=12450),
     ],
     "アストラ王の鎧": [
         Sanctuaries(bin_sho=4800, sei_ki=8730),
         Sanctuaries(kou_bou=11205, kyo_ko_tei_ko=5850),
         Sanctuaries(tai_ryoku=8730, bou_gyo_mu_shi=6262),
         Sanctuaries(katsu_ryoku=8550, kyo_ko=2550),
-        Sanctuaries(sho_geki=8355, bou_gyo=23142)
+        Sanctuaries(sho_geki=8355, bou_gyo=23142),
+        Sanctuaries(kou_geki=2550,bou_gyo=23142),
     ],
     "ユピテル王の法環": [
         Sanctuaries(bin_sho=9075, sei_ki=5850),
         Sanctuaries(kou_bou=7650, kyo_ko_tei_ko=11682),
         Sanctuaries(tai_ryoku=9306, bou_gyo_mu_shi=2550),
         Sanctuaries(katsu_ryoku=12046, kyo_ko=7005),
-        Sanctuaries(sho_geki=4800, bou_gyo=12450)
+        Sanctuaries(sho_geki=4800, bou_gyo=12450),
+        Sanctuaries(kou_geki=15379,bou_gyo=12450),
     ],
     "エーギル王の戦矛": [
         Sanctuaries(bin_sho=4800, sei_ki=9648),
         Sanctuaries(kou_bou=7650, kyo_ko_tei_ko=5850),
         Sanctuaries(tai_ryoku=5850, bou_gyo_mu_shi=7450),
         Sanctuaries(katsu_ryoku=12348, kyo_ko=7450),
-        Sanctuaries(sho_geki=9502, bou_gyo=26562)
+        Sanctuaries(sho_geki=9502, bou_gyo=26562),
+        Sanctuaries(kou_geki=2550,bou_gyo=26562),
     ],
-    # "エーギル王の戦鎧": [
-    #     Sanctuaries(bin_sho=4800, sei_ki=5850),
-    #     Sanctuaries(kou_bou=13311, kyo_ko_tei_ko=13590),
-    #     Sanctuaries(tai_ryoku=10440, bou_gyo_mu_shi=8472),
-    #     Sanctuaries(katsu_ryoku=13140, kyo_ko=2550),
-    #     Sanctuaries(sho_geki=4800, bou_gyo=12450)
-    # ],
+    "エーギル王の戦鎧": [
+        Sanctuaries(bin_sho=4800, sei_ki=5850),
+        Sanctuaries(kou_bou=13311, kyo_ko_tei_ko=13590),
+        Sanctuaries(tai_ryoku=10440, bou_gyo_mu_shi=8472),
+        Sanctuaries(katsu_ryoku=13140, kyo_ko=2550),
+        Sanctuaries(sho_geki=4800, bou_gyo=12450),
+        Sanctuaries(kou_geki=19560,bou_gyo=12450),
+    ],
     "エーギル王の明灯": [
         Sanctuaries(bin_sho=11010, sei_ki=10890),
         Sanctuaries(kou_bou=7650, kyo_ko_tei_ko=5850),
         Sanctuaries(tai_ryoku=5850, bou_gyo_mu_shi=2550),
         Sanctuaries(katsu_ryoku=12046, kyo_ko=7005),
-        Sanctuaries(sho_geki=11010, bou_gyo=31170)
+        Sanctuaries(sho_geki=11010, bou_gyo=31170),
+        Sanctuaries(kou_geki=2550,bou_gyo=31170),
     ],
+    # "至上マッシュの扇": [#Lv21
+    #     Sanctuaries(bin_sho=8118, sei_ki=7680),
+    #     Sanctuaries(kou_bou=10098, kyo_ko_tei_ko=10230),
+    #     Sanctuaries(tai_ryoku=7680, bou_gyo_mu_shi=6778),
+    #     Sanctuaries(katsu_ryoku=5830, kyo_ko=1770),
+    #     Sanctuaries(sho_geki=3330, bou_gyo=8490),
+    #     Sanctuaries(kou_geki=1770,bou_gyo=8490),
+    # ],
 }
 
 # アイテム名のリストを作成（順序を保持）
@@ -98,13 +116,15 @@ cost_matrix = max_value - weights  # コスト行列（スコア最大化→最�
 
 # ハンガリアン法（線形和代入）を適用
 row_ind, col_ind = linear_sum_assignment(cost_matrix)
+# 枠順にソート
+assignments = sorted(zip(col_ind, row_ind))  # 枠番号でソート
 
 print("最適な割り当て:")
 total = 0.0
-for i, j in zip(row_ind, col_ind):
-    value = weights[i][j]
-    item_name = item_names[i]
-    print(f"枠 {j + 1} → {item_name}（スコア {value}）")
+for frame_index, item_index in assignments:
+    value = weights[item_index][frame_index]
+    item_name = item_names[item_index]
+    print(f"枠 {frame_index + 1} → {item_name}（スコア {value}）")
     total += value
 
 print(f"最大スコア合計: {total}")
